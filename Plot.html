@@ -20,6 +20,8 @@
 <div id="myDiv15"></div>
 <div id="myDiv16"></div>
 <div id="myDiv17"></div>
+<script type="text/javascript" src="/js/plotly-latest.min.js"></script>
+<script type="text/javascript" src='/js/jquery.min.js'></script>
 <script>
 	var millArray = ["東莞", "廣東", "江蘇", "江西", "重慶" ];
 	var categoryArray = ["輔料(含化學品）", "澱粉", "輥、網布及毛布", "馬達/電機", "電器零件", "閥門類", "軸承類", "大五金(其他)", "小五金(其他)", "廠車配件(叉車,抱車,夾車)", "建築材料", "儀表類", "電腦設備", "文儀用品", "食材", "後勤" ];
@@ -117,7 +119,5 @@
 		Plotly.newPlot('myDiv' + idx, data, layout);
 	};
 </script>
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script src='https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js'></script>
 </body>
 </html>
