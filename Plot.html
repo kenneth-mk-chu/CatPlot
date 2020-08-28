@@ -23,6 +23,88 @@
 <div id="myDiv15"></div>
 <div id="myDiv16"></div>
 <div id="myDiv17"></div>
+<div id="myDiv19"></div>
+<div id="myDiv20"></div>
+<div id="myDiv21"></div>
+<div id="myDiv22"></div>
+<div id="myDiv23"></div>
+<div id="myDiv24"></div>
+<div id="myDiv25"></div>
+<div id="myDiv26"></div>
+<div id="myDiv27"></div>
+<div id="myDiv28"></div>
+<div id="myDiv29"></div>
+<div id="myDiv30"></div>
+<div id="myDiv31"></div>
+<div id="myDiv32"></div>
+<div id="myDiv33"></div>
+<div id="myDiv34"></div>
+<div id="myDiv35"></div>
+<div id="myDiv36"></div>
+<div id="myDiv37"></div>
+<div id="myDiv38"></div>
+<div id="myDiv39"></div>
+<div id="myDiv40"></div>
+<div id="myDiv41"></div>
+<div id="myDiv42"></div>
+<div id="myDiv43"></div>
+<div id="myDiv44"></div>
+<div id="myDiv45"></div>
+<div id="myDiv46"></div>
+<div id="myDiv47"></div>
+<div id="myDiv48"></div>
+<div id="myDiv49"></div>
+<div id="myDiv50"></div>
+<div id="myDiv51"></div>
+<div id="myDiv52"></div>
+<div id="myDiv53"></div>
+<div id="myDiv54"></div>
+<div id="myDiv55"></div>
+<div id="myDiv56"></div>
+<div id="myDiv57"></div>
+<div id="myDiv58"></div>
+<div id="myDiv59"></div>
+<div id="myDiv60"></div>
+<div id="myDiv61"></div>
+<div id="myDiv62"></div>
+<div id="myDiv63"></div>
+<div id="myDiv64"></div>
+<div id="myDiv65"></div>
+<div id="myDiv66"></div>
+<div id="myDiv67"></div>
+<div id="myDiv68"></div>
+<div id="myDiv69"></div>
+<div id="myDiv70"></div>
+<div id="myDiv71"></div>
+<div id="myDiv72"></div>
+<div id="myDiv73"></div>
+<div id="myDiv74"></div>
+<div id="myDiv75"></div>
+<div id="myDiv76"></div>
+<div id="myDiv77"></div>
+<div id="myDiv78"></div>
+<div id="myDiv79"></div>
+<div id="myDiv80"></div>
+<div id="myDiv81"></div>
+<div id="myDiv82"></div>
+<div id="myDiv83"></div>
+<div id="myDiv84"></div>
+<div id="myDiv85"></div>
+<div id="myDiv86"></div>
+<div id="myDiv87"></div>
+<div id="myDiv88"></div>
+<div id="myDiv89"></div>
+<div id="myDiv90"></div>
+<div id="myDiv91"></div>
+<div id="myDiv92"></div>
+<div id="myDiv93"></div>
+<div id="myDiv94"></div>
+<div id="myDiv95"></div>
+<div id="myDiv96"></div>
+<div id="myDiv97"></div>
+<div id="myDiv98"></div>
+<div id="myDiv99"></div>
+
 <script>
 	var millArray = ["東莞", "廣東", "江蘇", "江西", "重慶" ];
 	var categoryArray = ["輔料(含化學品）", "澱粉", "輥、網布及毛布", "馬達/電機", "電器零件", "閥門類", "軸承類", "大五金(其他)", "小五金(其他)", "廠車配件(叉車,抱車,夾車)", "建築材料", "儀表類", "電腦設備", "文儀用品", "食材", "後勤" ];
@@ -56,6 +138,7 @@
 	
 		var catMatrix = [];
 		rowCnt = 0;
+		cnt = 0;
 		for (var mill = 0; mill < millArray.length; mill++) {
 			millName = millArray[mill];		
 			
@@ -71,13 +154,13 @@
 					exY.push(row[2 * month - 1]);
 					imY.push(row[2 * month - 2]);
 				}
-				catMatrix[cat] = {
+				catMatrix[cnt] = {
 					x: Array.from(monthX),
 					y1: Array.from(exY),
 					y2: Array.from(imY),
-					title: millName + " - " + categoryArray[cat]
+					title: millName + " - " + categoryArray[cnt]
 				};
-				makePlotly(catMatrix[cat], cat + 1);
+				makePlotly(catMatrix[cnt], cnt++);
 				rowCnt++;
 			}
 		}
