@@ -24,6 +24,7 @@
 <div id="myDiv15"></div>
 <div id="myDiv16"></div>
 <div id="myDiv17"></div>
+<div id="myDiv18"></div>
 <div id="myDiv19"></div>
 <div id="myDiv20"></div>
 <div id="myDiv21"></div>
@@ -161,10 +162,12 @@
 					y2: Array.from(imY),
 					title: millName + " - " + categoryArray[cnt]
 				};
-				makePlotly(catMatrix[cnt], cnt++);
+				makePlotly(catMatrix[cnt], cnt);
+				cnt++;
 				rowCnt++;
 			}
 		}
+		console.log(catMatrix);
 		
 	}
 
