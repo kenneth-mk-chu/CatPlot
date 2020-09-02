@@ -47,16 +47,19 @@
 				monthX = [];
 				exY = [];
 				imY = [];
+				diffY = [];
 				
 				for (var month = 1; month <= (row.length / 2); month++) {
 					monthX.push(month);
 					exY.push(row[2 * month - 1]);
 					imY.push(row[2 * month - 2]);
+					diffY.push(row[2 * month - 1] - row[2 * month - 2]);
 				}
 				catMatrix[cnt] = {
 					x: Array.from(monthX),
 					y1: Array.from(exY),
 					y2: Array.from(imY),
+					y3: Array.from(diffY),
 					title: millName + " - " + categoryArray[cat]
 				};
 				makeTable(catMatrix[cnt], cnt);
@@ -90,7 +93,16 @@
 		var cellTextOut = document.createTextNode("出倉金額");		
 		cell.appendChild(cellTextOut);
 		row.appendChild(cell);
+		
+		var cell = document.createElement("th");		
+		var cellTextOut = document.createTextNode("差異金額");		
+		cell.appendChild(cellTextOut);
+		row.appendChild(cell);
 		tblBody.appendChild(row);
+		
+		ttlY1 = 0;
+		ttlY2 = 0;
+		ttlY3 = 0;
 		
 		for (var i = 0; i < catStructure.x.length; i++) {
 			// creates a table row
@@ -105,13 +117,44 @@
 			var cellTextIn = document.createTextNode(catStructure.y1[i]);
 			cell.appendChild(cellTextIn);
 			row.appendChild(cell);
+			ttlY1 += Number(catStructure.y1[i]);
 			
 			var cell = document.createElement("td");
 			var cellTextOut = document.createTextNode(catStructure.y2[i]);
 			cell.appendChild(cellTextOut);
 			row.appendChild(cell);	
+			ttlY2 += Number(catStructure.y2[i]);
+			
+			var cell = document.createElement("td");
+			var cellTextOut = document.createTextNode(catStructure.y3[i]);
+			cell.appendChild(cellTextOut);
+			row.appendChild(cell);	
+			ttlY3 += Number(catStructure.y3[i]);
 			tblBody.appendChild(row);
 		}
+		
+		var row = document.createElement("tr");
+			
+		var cell = document.createElement("td");
+		var cellTextM = document.createTextNode("總額");
+		cell.appendChild(cellTextM);
+		row.appendChild(cell);
+
+  		var cell = document.createElement("td");
+		var cellTextIn = document.createTextNode(ttlY1);
+		cell.appendChild(cellTextIn);
+		row.appendChild(cell);
+		
+		var cell = document.createElement("td");
+		var cellTextOut = document.createTextNode(ttlY2);
+		cell.appendChild(cellTextOut);
+		row.appendChild(cell);	
+			
+		var cell = document.createElement("td");
+		var cellTextOut = document.createTextNode(ttlY3);
+		cell.appendChild(cellTextOut);
+		row.appendChild(cell);	
+		tblBody.appendChild(row);
 		
 		tbl.appendChild(tblBody);
 		tbl.setAttribute("border", "2");
