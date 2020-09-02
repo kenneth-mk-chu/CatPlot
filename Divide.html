@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<head>
+</head>
+<body>
+<script src='js/jquery.min.js'></script>
+
+<script>
+	var millArray = ["集團", "東莞", "廣東", "江蘇", "江西", "重慶" ];
+	var categoryArray = ["輔料(含化學品）", "澱粉", "輥、網布及毛布", "馬達/電機", "電器零件", "閥門類", "軸承類", "大五金(其他)", "小五金(其他)", "廠車配件(叉車,抱車,夾車)", "建築材料", "儀表類", "電腦設備", "文儀用品", "食材", "後勤" ];
+
+	$(document).ready(function() {
+		$.ajax({
+			type: "GET",
+			url: "https://raw.githubusercontent.com/kenneth-mk-chu/CatPlot/master/BaseData.csv",
+			dataType: "text",
+			success: function(data) { processData(data); }
+		 });
+	});
+
+	function processData(data) {
+		var allTextLines = data.split(/\r\n|\n/);
+		var lines = [];
+		
+		for (var line = 0; line < allTextLines.length; line++) {
+			var entries = allTextLines[line].split(',');
+			lines.push(entries);
+		}
+		processArrayData(lines);
+	}
+
+	//function makeplot() {
+	//	Plotly.d3.csv("https://raw.githubusercontent.com/kenneth-mk-chu/CatPlot/master/BaseData.csv", function(data){ processData(data) } );
+	//};
+    
+	function processArrayData(allRows) {
+		console.log(allRows);
+	
+		var catMatrix = [];
+		rowCnt = 0;
+		cnt = 0;
+		for (var mill = 0; mill < millArray.length; mill++) {
+			millName = millArray[mill];		
+			
+			for (var cat = 0; cat < 16; cat++) { 
+				row = allRows[rowCnt];
+
+				monthX = [];
+				exY = [];
+				imY = [];
+				
+				for (var month = 1; month <= (row.length / 2); month++) {
+					monthX.push(month);
+					exY.push(row[2 * month - 1]);
+					imY.push(row[2 * month - 2]);
+				}
+				catMatrix[cnt] = {
+					x: Array.from(monthX),
+					y1: Array.from(exY),
+					y2: Array.from(imY),
+					title: millName + " - " + categoryArray[cat]
+				};
+				makeTable(catMatrix[cnt], cnt);
+				cnt++;
+				rowCnt++;
+			}
+		}
+		console.log(catMatrix);
+		
+	}
+	
+	function makeTable(catStructure, idx) {
+		var body = document.getElementsByTagName("body")[0];
+		
+		var tbl = document.createElement("table");
+		var tblBody = document.createElement("tbody");
+		
+		var row = document.createElement("tr");		
+		
+		var cell = document.createElement("th");		
+		var cellText = document.createTextNode(catStructure.title);		
+		cell.appendChild(cellText);
+		row.appendChild(cell);
+		
+		var cell = document.createElement("th");		
+		var cellTextIn = document.createTextNode("入倉金額");
+		cell.appendChild(cellTextIn);
+		row.appendChild(cell);
+		
+		var cell = document.createElement("th");		
+		var cellTextOut = document.createTextNode("出倉金額");		
+		cell.appendChild(cellTextOut);
+		row.appendChild(cell);
+		tblBody.appendChild(row);
+		
+		for (var i = 0; i < catStructure.x.length; i++) {
+			// creates a table row
+			var row = document.createElement("tr");
+			
+			var cell = document.createElement("td");
+			var cellTextM = document.createTextNode(catStructure.x[0]);
+			cell.appendChild(cellTextM);
+			row.appendChild(cell);
+
+  		    var cell = document.createElement("td");
+			var cellTextIn = document.createTextNode(catStructure.y1[0]);
+			cell.appendChild(cellTextIn);
+			row.appendChild(cell);
+			
+			var cell = document.createElement("td");
+			var cellTextOut = document.createTextNode(catStructure.y2[0]);
+			cell.appendChild(cellTextOut);
+			row.appendChild(cell);	
+			tblBody.appendChild(row);
+		}
+		
+		tbl.appendChild(tblBody);
+		tbl.setAttribute("border", "2");
+		body.appendChild(tbl);		
+	}
+</script>
+</body>
+</html>
