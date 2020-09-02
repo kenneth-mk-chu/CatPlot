@@ -308,7 +308,7 @@
 		  bargap: 0.5,
 		  bargroupgap: 0.0,
 		  title: {
-			text: catStructure.title,
+			text: '<b>' + catStructure.title + '</b>',
 			font: {
 			  family: '楷体, STKaiti, 华文楷体, serif',
 			  size: 18,
@@ -316,7 +316,7 @@
 		  },
 		  xaxis: {
 			title: {
-			  text: '月份',
+			  text: '<b>月份</b>',
 			  font: {
 			    family: '楷体, STKaiti, 华文楷体, serif',
 			    size: 14,
@@ -328,10 +328,11 @@
 			range: [0, 12],
 			linecolor: 'black',
 			linewidth: 2,
+			mirror: true,
 		  },
 		  yaxis: {
 			title: {
-			  text: '人民幣',
+			  text: '<b>人民幣</b>',
 			  font: {
 			    family: '楷体, STKaiti, 华文楷体, serif',
 			    size: 14,
@@ -340,7 +341,8 @@
 			gridcolor: '#cccccc',
 			gridwidth: 1,	
 			linecolor: 'black',
-			linewidth: 2,			
+			linewidth: 2,
+			mirror: true,			
 		  },
 		  legend: {
 			traceorder: 'normal',
@@ -349,7 +351,7 @@
 			  size: 14,
 			},
 			bordercolor: 'black',
-			borderwidth: 2,
+			borderwidth: 2,			
 		  },
 		};
 		
