@@ -176,12 +176,21 @@
 		var traceIm = {
 			x: catStructure.x, 
 			y: catStructure.y2,
+			mode: 'lines',
+			line: {
+				color: 'red',
+				width: 3
+			},
 			name: "入倉" 
 		};
 		var traceEx = {
 			x: catStructure.x, 
 			y: catStructure.y1,
-			fill: 'tonexty',
+			mode: 'lines',
+			line: {
+				color: 'green',
+				width: 3
+			},
 			name: "出倉"
 		};
 
@@ -198,6 +207,7 @@
 			title: {
 			  text: '月份',
 			},
+			range: [1, 12],
 		  },
 		  yaxis: {
 			title: {
