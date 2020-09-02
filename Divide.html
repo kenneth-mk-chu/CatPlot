@@ -97,17 +97,17 @@
 			var row = document.createElement("tr");
 			
 			var cell = document.createElement("td");
-			var cellTextM = document.createTextNode(catStructure.x[0]);
+			var cellTextM = document.createTextNode(catStructure.x[i]);
 			cell.appendChild(cellTextM);
 			row.appendChild(cell);
 
   		    var cell = document.createElement("td");
-			var cellTextIn = document.createTextNode(catStructure.y1[0]);
+			var cellTextIn = document.createTextNode(catStructure.y1[i]);
 			cell.appendChild(cellTextIn);
 			row.appendChild(cell);
 			
 			var cell = document.createElement("td");
-			var cellTextOut = document.createTextNode(catStructure.y2[0]);
+			var cellTextOut = document.createTextNode(catStructure.y2[i]);
 			cell.appendChild(cellTextOut);
 			row.appendChild(cell);	
 			tblBody.appendChild(row);
