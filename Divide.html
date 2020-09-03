@@ -53,7 +53,7 @@
 					monthX.push(month);
 					exY.push(row[2 * month - 1]);
 					imY.push(row[2 * month - 2]);
-					diffY.push(row[2 * month - 2] - row[2 * month - 1]);
+					diffY.push(row[2 * month - 1] - row[2 * month - 2]);
 				}
 				catMatrix[cnt] = {
 					x: Array.from(monthX),
@@ -114,13 +114,13 @@
 			row.appendChild(cell);
 
   		    var cell = document.createElement("td");
-			var cellTextIn = document.createTextNode(catStructure.y1[i]);
+			var cellTextIn = document.createTextNode(catStructure.y2[i]);
 			cell.appendChild(cellTextIn);
 			row.appendChild(cell);
 			ttlY1 += Number(catStructure.y1[i]);
 			
 			var cell = document.createElement("td");
-			var cellTextOut = document.createTextNode(catStructure.y2[i]);
+			var cellTextOut = document.createTextNode(catStructure.y1[i]);
 			cell.appendChild(cellTextOut);
 			row.appendChild(cell);	
 			ttlY2 += Number(catStructure.y2[i]);
@@ -141,12 +141,12 @@
 		row.appendChild(cell);
 
   		var cell = document.createElement("td");
-		var cellTextIn = document.createTextNode(ttlY1);
+		var cellTextIn = document.createTextNode(ttlY2);
 		cell.appendChild(cellTextIn);
 		row.appendChild(cell);
 		
 		var cell = document.createElement("td");
-		var cellTextOut = document.createTextNode(ttlY2);
+		var cellTextOut = document.createTextNode(ttlY1);
 		cell.appendChild(cellTextOut);
 		row.appendChild(cell);	
 			
