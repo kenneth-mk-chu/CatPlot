@@ -252,16 +252,26 @@
 				monthX = [];
 				exY = [];
 				imY = [];
+				maxY = 0;
 				
 				for (var month = 1; month <= (row.length / 2); month++) {
 					monthX.push(month);
 					exY.push(row[2 * month - 1]);
 					imY.push(row[2 * month - 2]);
+					
+					if (Number(row[2 * month - 1]) > maxY) {
+						maxY = Number(row[2 * month - 1]);
+					}
+					if (Number(row[2 * month - 2]) > maxY) {
+						maxY = Number(row[2 * month - 2]);
+					}
 				}
+				
 				catMatrix[cnt] = {
 					x: Array.from(monthX),
 					y1: Array.from(exY),
 					y2: Array.from(imY),
+					maxY: Math.pow(10, Math.ceil(Math.log10(maxY))),
 					title: millName + " - " + categoryArray[cat]
 				};
 				makePlotly(catMatrix[cnt], cnt);
@@ -345,6 +355,8 @@
 			},
 			gridcolor: '#999999',
 			gridwidth: 1,	
+			dtick: catStructure.maxY / 10,
+			range: [0, catStructure.maxY],
 			tickfont: {
 			  family: '楷体, STKaiti, 华文楷体, serif',
 			  size: 28,
@@ -361,10 +373,10 @@
 			},
 			bordercolor: 'black',
 			borderwidth: 2,		
-			orientation: 'h',
-			xanchor: 'right',
-			x: 1,
-			y: 1,
+			//orientation: 'h',
+			//xanchor: 'right',
+			//x: 1,
+			//y: 1,
 		  },
 		};
 		
@@ -381,6 +393,7 @@
 			)
 		});
 	};
+	
 </script>
 </body>
 </html>
