@@ -62,13 +62,99 @@
 					y3: Array.from(diffY),
 					title: millName + " - " + categoryArray[cat]
 				};
-				makeTable(catMatrix[cnt], cnt);
+				//makeTable(catMatrix[cnt], cnt);
+				makeHorizontalTable(catMatrix[cnt], cnt);
 				cnt++;
 				rowCnt++;
 			}
 		}
 		console.log(catMatrix);
 		
+	}
+	
+	function makeHorizontalTable(catStructure, idx) {
+		var body = document.getElementsByTagName("body")[0];
+		
+		var tbl = document.createElement("table");
+		var tblBody = document.createElement("tbody");
+		
+		var row = document.createElement("tr");				
+		var cell = document.createElement("th");		
+		var cellText = document.createTextNode(catStructure.title);		
+		cell.appendChild(cellText);
+		row.appendChild(cell);		
+
+		for (var i = 0; i < 12; i++) {
+			var cell = document.createElement("th");		
+			var cellTextM = document.createTextNode(catStructure.x.length > i ? catStructure.x[i] : i + 1);
+			cell.appendChild(cellTextM);
+			row.appendChild(cell);
+		}
+		var cell = document.createElement("th");		
+		var cellTextM = document.createTextNode("總額");
+		cell.appendChild(cellTextM);
+		row.appendChild(cell);
+		tblBody.appendChild(row);
+		
+		var ttlY = 0;
+		var row = document.createElement("tr");	
+		var cell = document.createElement("th");
+		var cellTextIn = document.createTextNode("入倉金額");
+		cell.appendChild(cellTextIn);
+		row.appendChild(cell);
+		for (var i = 0; i < 12; i++) {
+			var cell = document.createElement("td");		
+			var cellTextIn = document.createTextNode(catStructure.y2.length > i ? catStructure.y2[i] : "-");
+			cell.appendChild(cellTextIn);
+			row.appendChild(cell);
+			ttlY += catStructure.y2.length > i ? Number(catStructure.y2[i]) : 0;
+		}
+		var cell = document.createElement("th");		
+		var cellTextIn = document.createTextNode(ttlY);
+		cell.appendChild(cellTextIn);
+		row.appendChild(cell);
+		tblBody.appendChild(row);
+		
+		var ttlY = 0;
+		var row = document.createElement("tr");	
+		var cell = document.createElement("th");
+		var cellTextOut = document.createTextNode("出倉金額");
+		cell.appendChild(cellTextOut);
+		row.appendChild(cell);
+		for (var i = 0; i < 12; i++) {
+			var cell = document.createElement("td");		
+			var cellTextOut = document.createTextNode(catStructure.y1.length > i ? catStructure.y1[i] : "-");
+			cell.appendChild(cellTextOut);
+			row.appendChild(cell);
+			ttlY += catStructure.y1.length > i ? Number(catStructure.y1[i]) : 0;
+		}
+		var cell = document.createElement("th");		
+		var cellTextOut = document.createTextNode(ttlY);
+		cell.appendChild(cellTextOut);
+		row.appendChild(cell);
+		tblBody.appendChild(row);
+		
+		var ttlY = 0;
+		var row = document.createElement("tr");	
+		var cell = document.createElement("th");
+		var cellTextDiff = document.createTextNode("差異金額");
+		cell.appendChild(cellTextDiff);
+		row.appendChild(cell);
+		for (var i = 0; i < 12; i++) {
+			var cell = document.createElement("td");		
+			var cellTextDiff = document.createTextNode(catStructure.y3.length > i ? catStructure.y3[i] : "-");
+			cell.appendChild(cellTextDiff);
+			row.appendChild(cell);
+			ttlY += catStructure.y3.length > i ? Number(catStructure.y3[i]) : 0;
+		}
+		var cell = document.createElement("th");		
+		var cellTextDiff = document.createTextNode(ttlY);
+		cell.appendChild(cellTextDiff);
+		row.appendChild(cell);
+		tblBody.appendChild(row);		
+		tbl.appendChild(tblBody);
+		tbl.setAttribute("border", "2");
+		body.appendChild(tbl);		
 	}
 	
 	function makeTable(catStructure, idx) {
