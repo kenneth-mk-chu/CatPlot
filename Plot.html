@@ -311,7 +311,7 @@
 			text: '<b>' + catStructure.title + '</b>',
 			font: {
 			  family: '楷体, STKaiti, 华文楷体, serif',
-			  size: 18,
+			  size: 36,
 			},
 		  },
 		  xaxis: {
@@ -319,12 +319,17 @@
 			  text: '<b>月份</b>',
 			  font: {
 			    family: '楷体, STKaiti, 华文楷体, serif',
-			    size: 14,
+			    size: 28,
 			  },
 			},
 			gridcolor: '#cccccc',
 			gridwidth: 1,	
 			dtick: 1,
+			tickvals: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+			tickfont: {
+			  family: '楷体, STKaiti, 华文楷体, serif',
+			  size: 28,
+			},
 			range: [0, 12],
 			linecolor: 'black',
 			linewidth: 2,
@@ -335,11 +340,15 @@
 			  text: '<b>人民幣</b>',
 			  font: {
 			    family: '楷体, STKaiti, 华文楷体, serif',
-			    size: 14,
+			    size: 28,
 			  },
 			},
 			gridcolor: '#cccccc',
 			gridwidth: 1,	
+			tickfont: {
+			  family: '楷体, STKaiti, 华文楷体, serif',
+			  size: 28,
+			},
 			linecolor: 'black',
 			linewidth: 2,
 			mirror: true,			
@@ -348,10 +357,14 @@
 			traceorder: 'normal',
 			font: {
 			  family: '楷体, STKaiti, 华文楷体, serif',
-			  size: 14,
+			  size: 28,
 			},
 			bordercolor: 'black',
-			borderwidth: 2,			
+			borderwidth: 2,		
+			orientation: 'h',
+			xanchor: 'right',
+			x: 1,
+			y: 1,
 		  },
 		};
 		
@@ -359,7 +372,7 @@
 		.then(
 		function(gd)
 			{
-				Plotly.toImage(gd,{height:400,width:1200})
+				Plotly.toImage(gd,{height:800,width:2400})
 				.then(
 					function(url)
 				{
