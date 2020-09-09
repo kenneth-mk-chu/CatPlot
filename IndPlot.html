@@ -149,6 +149,7 @@
 	var urlParams;
 	
 	$(document).ready(function() {
+		console.log(window.location.search);
 		urlParams = new URLSearchParams(window.location.search);
 
 		console.log(urlParams.has('loc'));
