@@ -235,10 +235,11 @@
 				
 				if (pdtY[month - 1] > maxY2) { 
 					maxY2 = pdtY[month - 1];
-					
-					if (pdtY[month - 1] > ttlCatMatrix.maxY2) {
-						ttlCatMatrix.maxY2 = pdtY[month - 1];
-					}
+				}
+				
+				// stupid way...
+				if (ttlCatMatrix.y3[month - 1] > ttlCatMatrix.maxY2) {
+					ttlCatMatrix.maxY2 = ttlCatMatrix.y3[month - 1];
 				}
 			}
 			
@@ -396,8 +397,10 @@
 			type: 'scatter',
 			marker: {
 				line: {
-				  width: 1,
+				  width: 2,
 				},
+				size: 12,
+				color: "black",
 			},
 			name: "噸紙成本"
 		};
