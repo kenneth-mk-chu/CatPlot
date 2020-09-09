@@ -31,11 +31,149 @@
 			font-family: 楷体, STKaiti, 华文楷体, serif;
             color: green;
         }
+		
+	*,
+	*:before,
+	*:after {
+	  -moz-box-sizing: border-box;
+	  -webkit-box-sizing: border-box;
+	  box-sizing: border-box;
+	}
+
+	body {
+	  font-family: 楷体, STKaiti, 华文楷体, serif;
+	  font-size: 28px;
+	  color: #384047;
+	}
+
+	form {
+	  max-width: 300px;
+	  margin: 10px auto;
+	  padding: 10px 20px;
+	  background: #f4f7f8;
+	  border-radius: 8px;
+	}
+
+	h1 {
+	  margin: 0 0 30px 0;
+	  text-align: center;
+	}
+
+	input[type="text"],
+	input[type="password"],
+	input[type="date"],
+	input[type="datetime"],
+	input[type="email"],
+	input[type="number"],
+	input[type="search"],
+	input[type="tel"],
+	input[type="time"],
+	input[type="url"],
+	textarea,
+	select {
+	  background: rgba(255, 255, 255, 0.1);
+	  border: none;
+	  font-family: 楷体, STKaiti, 华文楷体, serif;
+	  font-size: 20px;
+	  height: auto;
+	  margin: 0;
+	  outline: 0;
+	  padding: 15px;
+	  width: 100%;
+	  background-color: #e8eeef;
+	  color: #8a97a0;
+	  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
+	  margin-bottom: 30px;
+	}
+
+	input[type="radio"],
+	input[type="checkbox"] {
+	  margin: 0 4px 8px 0;
+	}
+
+	select {
+	  padding: 6px;
+	  height: 32px;
+	  border-radius: 2px;
+	}
+
+	button {
+	  padding: 19px 39px 18px 39px;
+	  color: #FFF;
+	  background-color: #4bc970;
+	  font-family: 楷体, STKaiti, 华文楷体, serif;
+	  font-size: 18px;
+	  text-align: center;
+	  font-style: normal;
+	  border-radius: 5px;
+	  width: 100%;
+	  border: 1px solid #3ac162;
+	  border-width: 1px 1px 3px;
+	  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1) inset;
+	  margin-bottom: 10px;
+	}
+
+	fieldset {
+	  margin-bottom: 30px;
+	  border: none;
+	}
+
+	legend {
+	  font-family: 楷体, STKaiti, 华文楷体, serif;
+	  font-size: 1.4em;
+	  margin-bottom: 10px;
+	}
+
+	label {
+	  display: block;
+	  margin-bottom: 8px;
+	}
+
+	label.light {
+	  font-family: 楷体, STKaiti, 华文楷体, serif;
+	  font-weight: 300;
+	  display: inline;
+	}
+
+	.number {
+	  background-color: #5fcf80;
+	  color: #fff;
+	  height: 30px;
+	  width: 30px;
+	  display: inline-block;
+	  font-family: 楷体, STKaiti, 华文楷体, serif;
+	  font-size: 0.8em;
+	  margin-right: 4px;
+	  line-height: 30px;
+	  text-align: center;
+	  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+	  border-radius: 100%;
+	}
+
+	@media screen and (min-width: 480px) {
+	  form {
+		max-width: 480px;
+	  }
+	}
 	</style>
 </head>
 <body>
 <script src="js/plotly-latest.min.js"></script>
 <script src='js/jquery.min.js'></script>
+
+<form action="javascript:void(0);" >
+	<select id="loc" name="loc">
+	  <option value="GD">東莞</option>
+	  <option value="DG">廣東</option>
+	  <option value="JS">江蘇</option>
+	  <option value="JX">江西</option>
+	  <option value="CQ">重慶</option>
+	  <option value="VN">越南</option>
+	  <option value="MY">馬來西亞</option>	  
+	</select>
+	<button id="generate" value="generate">生成</button>
+</form>
+<br><br><hr><br><br>
 
 <!-- Plotly chart will be drawn inside this DIV -->
 <div id="myDiv0" style="display: none;"></div>
@@ -146,19 +284,19 @@
 	
 	var categoryArray = ["輔料(含化學品）", "澱粉", "輥、網布及毛布", "馬達/電機", "電器零件", "閥門類", "軸承類", "大五金(其他)", "小五金(其他)", "廠車配件(叉車,抱車,夾車)", "建築材料", "儀表類", "電腦設備", "文儀用品", "食材", "後勤" ];
 	var d3 = Plotly.d3;
-	var urlParams;
+	var loc = "";
 	
 	$(document).ready(function() {
-		console.log(window.location.search);
-		urlParams = new URLSearchParams(window.location.search);
-
-		console.log(urlParams.has('loc'));
-		console.log(urlParams.get('loc'));
-		$.ajax({
-			type: "GET",
-			url: "https://raw.githubusercontent.com/kenneth-mk-chu/CatPlot/master/Data_" + urlParams.get('loc') + ".csv",
-			dataType: "text",
-			success: function(data) { processData(data); }
+		$("#generate").on('click', function(e) {
+			loc = document.getElementById("loc").options[document.getElementById("loc").selectedIndex].value;
+			console.log(loc);
+			
+			$.ajax({
+				type: "GET",
+				url: "https://raw.githubusercontent.com/kenneth-mk-chu/CatPlot/master/Data_" + loc + ".csv",
+				dataType: "text",
+				success: function(data) { processData(data); }
+			});
 		 });
 	});
 
@@ -185,8 +323,8 @@
 			pdtVol: null,
 			maxY: 0,
 			maxY2: 0,
-			title: "匯總",
-			currency: currMap.get(urlParams.get('loc')),
+			title: millMap.get(loc) + " - 匯總",
+			currency: currMap.get(loc),
 		};
 		
 		rowCnt = 0;
@@ -252,8 +390,8 @@
 				pdtVol: pdtVolume,
 				maxY: Math.pow(10, Math.ceil(Math.log10(maxY))),
 				maxY2: Math.pow(10, Math.ceil(Math.log10(maxY2))),
-				title: millMap.get(urlParams.get('loc')) + " - " + categoryArray[cat],
-				currency: currMap.get(urlParams.get('loc')),
+				title: millMap.get(loc) + " - " + categoryArray[cat],
+				currency: currMap.get(loc),
 			};
 			makeTable(catMatrix[cat], cat);
 			makePlotly(catMatrix[cat], cat);
@@ -271,6 +409,11 @@
 	
 	function makeTable(catStructure, idx) {
 		var tbl = document.getElementById("table" + idx);
+		
+		// clear the table first...
+		while (tbl.rows.length > 0) {
+			tbl.deleteRow(-1);
+		}
 		
 		var row = tbl.insertRow(-1);
 		var headerCell = document.createElement("TH");
