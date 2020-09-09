@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<head>
+	<style>
+		table, td, th {
+		  border: 1px solid black;
+		}
+
+		table {
+		  border-collapse: collapse;
+		  width: 100%;
+		}
+
+		th, td {
+		  text-align: right;
+		  font-family: 楷体, STKaiti, 华文楷体, serif;
+		  font-size: 18px;
+		}		
+		
+		.redFont {
+			font-weight: bold;
+			font-family: 楷体, STKaiti, 华文楷体, serif;
+            color: red;
+        }
+		
+		.redFont::before {
+			content: "+";
+		}
+			
+		.greenFont {
+			font-weight: bold;
+			font-family: 楷体, STKaiti, 华文楷体, serif;
+            color: green;
+        }
+	</style>
+</head>
+<body>
+<script src="js/plotly-latest.min.js"></script>
+<script src='js/jquery.min.js'></script>
+
+<!-- Plotly chart will be drawn inside this DIV -->
+<div id="myDiv0" style="display: none;"></div>
+<div id="myDiv1" style="display: none;"></div>
+<div id="myDiv2" style="display: none;"></div>
+<div id="myDiv3" style="display: none;"></div>
+<div id="myDiv4" style="display: none;"></div>
+<div id="myDiv5" style="display: none;"></div>
+<div id="myDiv6" style="display: none;"></div>
+<div id="myDiv7" style="display: none;"></div>
+<div id="myDiv8" style="display: none;"></div>
+<div id="myDiv9" style="display: none;"></div>
+<div id="myDiv10" style="display: none;"></div>
+<div id="myDiv11" style="display: none;"></div>
+<div id="myDiv12" style="display: none;"></div>
+<div id="myDiv13" style="display: none;"></div>
+<div id="myDiv14" style="display: none;"></div>
+<div id="myDiv15" style="display: none;"></div>
+<div id="myDiv16" style="display: none;"></div>
+
+<table id="table16"></table>
+<img id="png-export16"></img>
+<br><br><br><hr><br>
+
+<table id="table0"></table>
+<img id="png-export0"></img>
+<br><br><br><hr><br>
+
+<table id="table1"></table>
+<img id="png-export1"></img>
+<br><br><br><hr><br>
+
+<table id="table2"></table>
+<img id="png-export2"></img>
+<br><br><br><hr><br>
+
+<table id="table3"></table>
+<img id="png-export3"></img>
+<br><br><br><hr><br>
+
+<table id="table4"></table>
+<img id="png-export4"></img>
+<br><br><br><hr><br>
+
+<table id="table5"></table>
+<img id="png-export5"></img>
+<br><br><br><hr><br>
+
+<table id="table6"></table>
+<img id="png-export6"></img>
+<br><br><br><hr><br>
+
+<table id="table7"></table>
+<img id="png-export7"></img>
+<br><br><br><hr><br>
+
+<table id="table8"></table>
+<img id="png-export8"></img>
+<br><br><br><hr><br>
+
+<table id="table9"></table>
+<img id="png-export9"></img>
+<br><br><br><hr><br>
+
+<table id="table10"></table>
+<img id="png-export10"></img>
+<br><br><br><hr><br>
+
+<table id="table11"></table>
+<img id="png-export11"></img>
+<br><br><br><hr><br>
+
+<table id="table12"></table>
+<img id="png-export12"></img>
+<br><br><br><hr><br>
+
+<table id="table13"></table>
+<img id="png-export13"></img>
+<br><br><br><hr><br>
+
+<table id="table14"></table>
+<img id="png-export14"></img>
+<br><br><br><hr><br>
+
+<table id="table15"></table>
+<img id="png-export15"></img>
+<br><br><br><hr><br>
+
+<script>
+	let millMap = new Map();
+	millMap.set('DG', '東莞');
+	millMap.set('GD', '廣東');
+	millMap.set('JS', '江蘇');
+	millMap.set('JX', '江西');
+	millMap.set('CQ', '重慶');
+	millMap.set('VN', '越南');
+	millMap.set('MY', '馬來西亞');
+	
+	let currMap = new Map();
+	currMap.set('DG', '人民幣');
+	currMap.set('GD', '人民幣');
+	currMap.set('JS', '人民幣');
+	currMap.set('JX', '人民幣');
+	currMap.set('CQ', '人民幣');
+	currMap.set('VN', '越南盾');
+	currMap.set('MY', '令吉');
+	
+	
+	var categoryArray = ["輔料(含化學品）", "澱粉", "輥、網布及毛布", "馬達/電機", "電器零件", "閥門類", "軸承類", "大五金(其他)", "小五金(其他)", "廠車配件(叉車,抱車,夾車)", "建築材料", "儀表類", "電腦設備", "文儀用品", "食材", "後勤" ];
+	var d3 = Plotly.d3;
+	var urlParams;
+	
+	$(document).ready(function() {
+		urlParams = new URLSearchParams(window.location.search);
+
+		console.log(urlParams.has('loc'));
+		console.log(urlParams.get('loc'));
+		$.ajax({
+			type: "GET",
+			url: "https://raw.githubusercontent.com/kenneth-mk-chu/CatPlot/master/Data_" + urlParams.get('loc') + ".csv",
+			dataType: "text",
+			success: function(data) { processData(data); }
+		 });
+	});
+
+	function processData(data) {
+		var allTextLines = data.split(/\r\n|\n/);
+		var lines = [];
+		
+		for (var line = 0; line < allTextLines.length; line++) {
+			var entries = allTextLines[line].split(',');
+			lines.push(entries);
+		}
+		processArrayData(lines);
+	}
+    
+	function processArrayData(allRows) {
+		console.log(allRows);
+		
+		var catMatrix = [];		
+		var ttlCatMatrix = {
+			x: Array.from({length: allRows[0].length}, (_, index) => index + 1),
+			y1: Array(allRows[0].length).fill(0),
+			y2: Array(allRows[0].length).fill(0),
+			y3: Array(allRows[0].length).fill(0),
+			pdtVol: null,
+			maxY: 0,
+			maxY2: 0,
+			title: "匯總",
+			currency: currMap.get(urlParams.get('loc')),
+		};
+		
+		rowCnt = 0;
+		cnt = 0;
+		
+		// Get product volume...
+		pdtVolume = allRows[rowCnt++];	
+		for (var cat = 0; cat < categoryArray.length; cat++) { 
+			monthX = [];
+			imY = [];
+			exY = [];
+			pdtY = [];
+			maxY = 0;
+			maxY2 = 0;
+			
+			// import...
+			row = allRows[rowCnt++];
+			for (var month = 1; month <= row.length; month++) {
+				monthX.push(month);
+				imY.push(row[month - 1]);
+				
+				ttlCatMatrix.y1[month - 1] += Number(row[month - 1]);				
+				if (Number(row[month - 1]) > maxY) {
+					maxY = Number(row[month - 1]);
+					
+					if (Number(row[month - 1]) > ttlCatMatrix.maxY) {
+						ttlCatMatrix.maxY = Number(row[month - 1]);
+					}
+				}
+			}
+			
+			// export...
+			row = allRows[rowCnt++];
+			for (var month = 1; month <= row.length; month++) {
+				exY.push(row[month - 1]);
+				pdtY.push(Number(row[month - 1]) / Number(pdtVolume[month - 1]));
+				
+				ttlCatMatrix.y2[month - 1] += Number(row[month - 1]);
+				ttlCatMatrix.y3[month - 1] += pdtY[month - 1];
+				if (Number(row[month - 1]) > maxY) {
+					maxY = Number(row[month - 1]);
+					
+					if (Number(row[month - 1]) > ttlCatMatrix.maxY) {
+						ttlCatMatrix.maxY = Number(row[month - 1]);
+					}
+				}
+				
+				if (pdtY[month - 1] > maxY2) { 
+					maxY2 = pdtY[month - 1];
+					
+					if (pdtY[month - 1] > ttlCatMatrix.maxY2) {
+						ttlCatMatrix.maxY2 = pdtY[month - 1];
+					}
+				}
+			}
+			
+			catMatrix[cat] = {
+				x: Array.from(monthX),
+				y1: Array.from(imY),
+				y2: Array.from(exY),
+				y3: Array.from(pdtY),
+				pdtVol: pdtVolume,
+				maxY: Math.pow(10, Math.ceil(Math.log10(maxY))),
+				maxY2: Math.pow(10, Math.ceil(Math.log10(maxY2))),
+				title: millMap.get(urlParams.get('loc')) + " - " + categoryArray[cat],
+				currency: currMap.get(urlParams.get('loc')),
+			};
+			makeTable(catMatrix[cat], cat);
+			makePlotly(catMatrix[cat], cat);
+		}		
+		console.log(catMatrix);
+		
+		console.log(ttlCatMatrix);
+		ttlCatMatrix.maxY = Math.pow(10, Math.ceil(Math.log10(ttlCatMatrix.maxY)));
+		ttlCatMatrix.maxY2 = Math.pow(10, Math.ceil(Math.log10(ttlCatMatrix.maxY2)));
+		ttlCatMatrix.pdtVol = pdtVolume;
+		makeTable(ttlCatMatrix, cat);
+		makePlotly(ttlCatMatrix, cat);
+		
+	}
+	
+	function makeTable(catStructure, idx) {
+		var tbl = document.getElementById("table" + idx);
+		
+		var row = tbl.insertRow(-1);
+		var headerCell = document.createElement("TH");
+        headerCell.innerHTML = "月份";
+        row.appendChild(headerCell);
+        for (var i = 0; i < 12; i++) {
+            var headerCell = document.createElement("TH");
+            headerCell.innerHTML = catStructure.x.length > i ? catStructure.x[i] : i + 1;
+            row.appendChild(headerCell);
+        }	
+		var headerCell = document.createElement("TH");
+        headerCell.innerHTML = "總額";
+        row.appendChild(headerCell);
+				
+		var ttlY = 0;
+		var row = tbl.insertRow(-1);	
+		var cell = document.createElement("TH");
+        cell.innerHTML = "入倉金額";
+        row.appendChild(cell);		
+		for (var i = 0; i < 12; i++) {
+			var cell = row.insertCell(-1);
+            cell.innerHTML = catStructure.y1.length > i ? Number(catStructure.y1[i]).toFixed(2) : "-";			
+			ttlY += catStructure.y1.length > i ? Number(catStructure.y1[i]) : 0;
+		}
+		var cell = row.insertCell(-1);
+        cell.innerHTML = ttlY.toFixed(2);		
+				
+		var ttlY = 0;
+		var row = tbl.insertRow(-1);	
+		var cell = document.createElement("TH");
+        cell.innerHTML = "出倉金額";
+        row.appendChild(cell);		
+		for (var i = 0; i < 12; i++) {
+			var cell = row.insertCell(-1);
+            cell.innerHTML = catStructure.y2.length > i ? Number(catStructure.y2[i]).toFixed(2) : "-";			
+			ttlY += catStructure.y2.length > i ? Number(catStructure.y2[i]) : 0;
+		}
+		var cell = row.insertCell(-1);
+        cell.innerHTML = ttlY.toFixed(2);		
+		
+		var ttlY = 0;
+		var row = tbl.insertRow(-1);	
+		var cell = document.createElement("TH");
+        cell.innerHTML = "差異金額";
+        row.appendChild(cell);		
+		for (var i = 0; i < 12; i++) {
+			var cell = row.insertCell(-1);
+			
+			if (catStructure.y1.length > i) { 				
+				diff = Number(catStructure.y1[i]) - Number(catStructure.y2[i])
+				cell.innerHTML = diff.toFixed(2);
+				ttlY += diff;
+			} else {
+				cell.innerHTML = "-";
+			}
+		}
+		var cell = row.insertCell(-1);
+        cell.innerHTML = ttlY.toFixed(2);	
+		if (cell.innerHTML < 0) {
+			cell.classList.add('greenFont');
+		} else {
+			cell.classList.add('redFont');
+		}
+		
+		var ttlY = 0;
+		var row = tbl.insertRow(-1);	
+		var cell = document.createElement("TH");
+        cell.innerHTML = "生產量 (噸)";
+        row.appendChild(cell);		
+		for (var i = 0; i < 12; i++) {
+			var cell = row.insertCell(-1);
+            cell.innerHTML = catStructure.pdtVol.length > i ? Number(catStructure.pdtVol[i]).toFixed(2) : "-";			
+			ttlY += catStructure.pdtVol.length > i ? Number(catStructure.pdtVol[i]) : 0;
+		}
+		var cell = row.insertCell(-1);
+        cell.innerHTML = ttlY.toFixed(2);
+		
+		var ttlY = 0;
+		var row = tbl.insertRow(-1);	
+		var cell = document.createElement("TH");
+        cell.innerHTML = "噸紙成本";
+        row.appendChild(cell);		
+		for (var i = 0; i < 12; i++) {
+			var cell = row.insertCell(-1);
+            cell.innerHTML = catStructure.y3.length > i ? Number(catStructure.y3[i]).toFixed(2) : "-";			
+			ttlY += catStructure.y3.length > i ? Number(catStructure.y3[i]) : 0;
+		}
+		var cell = row.insertCell(-1);
+        cell.innerHTML = ttlY.toFixed(2);
+	}
+	
+	function makePlotly(catStructure, idx) {
+		var img_png= d3.select('#png-export' + idx);
+		
+		var traceIm = {
+			x: catStructure.x, 
+			y: catStructure.y1,
+			yaxis: 'y',
+			type: 'bar',
+			marker: {
+				opacity: 0.8,
+				line: {
+				  width: 1,
+				},
+			},
+			name: "入倉" 
+		};
+		var traceEx = {
+			x: catStructure.x, 
+			y: catStructure.y2,
+			yaxis: 'y',
+			type: 'bar',
+			marker: {
+				opacity: 0.8,
+				line: {
+				  width: 1,
+				},
+			},
+			name: "出倉"
+		};
+		var tracePdt = {
+			x: catStructure.x, 
+			y: catStructure.y3,
+			yaxis: 'y2',
+			type: 'scatter',
+			marker: {
+				line: {
+				  width: 1,
+				},
+			},
+			name: "噸紙成本"
+		};
+
+		var data = [traceIm, traceEx, tracePdt];
+		
+		var layout = {
+		  margin: {
+			l: 100,
+			r: 100,
+		  },
+		  barmode: 'group',
+		  bargap: 0.5,
+		  bargroupgap: 0.0,
+		  title: {
+			text: '<b>' + catStructure.title + '</b>',
+			font: {
+			  family: '楷体, STKaiti, 华文楷体, serif',
+			  size: 36,
+			},
+		  },
+		  xaxis: {
+			title: {
+			  text: '<b>月份</b>',
+			  font: {
+			    family: '楷体, STKaiti, 华文楷体, serif',
+			    size: 28,
+			  },
+			},
+			gridcolor: '#999999',
+			gridwidth: 1,	
+			dtick: 1,
+			tickvals: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+			tickfont: {
+			  family: '楷体, STKaiti, 华文楷体, serif',
+			  size: 28,
+			},
+			range: [0, 12],
+			linecolor: 'black',
+			linewidth: 2,
+			mirror: true,
+		  },
+		  yaxis: {
+			title: {
+			  text: '<b>' + catStructure.currency + '</b>',
+			  font: {
+			    family: '楷体, STKaiti, 华文楷体, serif',
+			    size: 28,
+			  },
+			},
+			gridcolor: '#999999',
+			gridwidth: 1,	
+			dtick: catStructure.maxY / 10,
+			range: [0, catStructure.maxY],
+			tickfont: {
+			  family: '楷体, STKaiti, 华文楷体, serif',
+			  size: 28,
+			},
+			linecolor: 'black',
+			linewidth: 2,
+		  },
+		  yaxis2: {
+			title: {
+			  text: '<b>噸紙成本 (' + catStructure.currency + ')</b>',
+			  font: {
+			    family: '楷体, STKaiti, 华文楷体, serif',
+			    size: 28,
+			  },
+			},
+			dtick: catStructure.maxY2 / 10,
+			range: [0, catStructure.maxY2],
+			tickfont: {
+			  family: '楷体, STKaiti, 华文楷体, serif',
+			  size: 28,
+			},
+			linecolor: 'black',
+			linewidth: 2,
+			anchor: 'x',
+			overlaying: 'y',
+			side: 'right',
+		  },		  
+		  legend: {
+			traceorder: 'normal',
+			itemsizing: "trace",
+			valign: "middle",
+			font: {
+			  family: '楷体, STKaiti, 华文楷体, serif',
+			  size: 28,
+			},
+			bordercolor: 'black',
+			borderwidth: 1,		
+			//orientation: 'h',
+			xanchor: 'right',
+			x: 1,
+			y: 1,
+		  },
+		};
+		
+		Plotly.newPlot('myDiv' + idx, data, layout)
+		.then(
+		function(gd)
+			{
+				Plotly.toImage(gd,{height:720,width:2160})
+				.then(
+					function(url)
+				{
+					img_png.attr("src", url);
+				}
+			)
+		});
+	};
+	
+</script>
+</body>
+</html>
