@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 	<style>
 		table, td, th {
 		  border: 1px solid black;
@@ -156,6 +157,12 @@
 		max-width: 480px;
 	  }
 	}
+	
+	.center {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 	</style>
 </head>
 <body>
@@ -178,6 +185,20 @@
 	<button id="generate" value="generate">生成</button>
 </form>
 <br><br><hr><br><br>
+
+<div class="row">
+    <div class="col-sm-6">
+		<div class="center">
+			<div id="myDivIn" style="display: none;"></div>
+		</div>
+	</div>
+    <div class="col-sm-6">
+		<div class="center">
+			<div id="myDivOut" style="display: none;"></div>
+		</div>
+	</div>
+</div>
+<br>
 
 <table id="table16"></table>
 <div id="myDiv16" style="display: none;"></div>
@@ -330,6 +351,7 @@
 			maxY: 0,
 			maxY2: 0,
 			title: millMap.get(loc) + " - 匯總",
+			itemType: "",
 			currency: currMap.get(loc),
 		};
 		
@@ -398,6 +420,7 @@
 				maxY: Math.pow(10, Math.ceil(Math.log10(maxY))),
 				maxY2: Math.pow(10, Math.ceil(Math.log10(maxY2))),
 				title: millMap.get(loc) + " - " + categoryArray[cat],
+				itemType: categoryArray[cat],
 				currency: currMap.get(loc),
 			};
 			makeTable(catMatrix[cat], cat);
@@ -411,7 +434,7 @@
 		ttlCatMatrix.pdtVol = pdtVolume;
 		makeTable(ttlCatMatrix, cat);
 		makePlotly(ttlCatMatrix, cat);
-		
+		makeSBPlotly(ttlCatMatrix, catMatrix);		
 	}
 	
 	function makeTable(catStructure, idx) {
@@ -680,6 +703,85 @@
 		}
 	};
 	
+	function makeSBPlotly(catStructure, catMatrix) {	
+		if (isIntActGraph) { 		
+			// show
+			var dataIn = [{
+				type: "sunburst",
+				labels: ["入倉"],
+				parents: [""],
+				values: [catStructure.y1.reduce(function(lhs, rhs) { return lhs + rhs; }, 0)],
+				leaf: {"opacity": 0.4},
+				marker: {"line": {"width": 2}},
+				branchvalues: 'total',
+				textfont: {
+					family: '楷体, STKaiti, 华文楷体, serif',
+					size: 16,
+				},
+			}];
+			var dataOut = [{
+				type: "sunburst",
+				labels: ["出倉"],
+				parents: [""],
+				values: [catStructure.y2.reduce(function(lhs, rhs) { return lhs + rhs; }, 0)],
+				leaf: {"opacity": 0.4},
+				marker: {"line": {"width": 2}},
+				branchvalues: 'total',
+				textfont: {
+					family: '楷体, STKaiti, 华文楷体, serif',
+					size: 16,
+				},
+			}];
+			
+			for (var i = 0; i < catStructure.x.length; i++) {				
+				dataIn[0].labels.push(catStructure.x[i] + "月");
+				dataOut[0].labels.push(catStructure.x[i] + "月");
+				
+				dataIn[0].parents.push("入倉");
+				dataOut[0].parents.push("出倉");
+				
+				dataIn[0].values.push(catStructure.y1[i]);
+				dataOut[0].values.push(catStructure.y2[i]);
+				
+				for (var j = 0; j < catMatrix.length; j++) {
+					dataIn[0].labels.push(catMatrix[j].itemType + "(" + catStructure.x[i] + "月)");
+					dataIn[0].parents.push(catStructure.x[i] + "月");
+					dataIn[0].values.push(catMatrix[j].y1[i]);					
+					
+					dataOut[0].labels.push(catMatrix[j].itemType + "(" + catStructure.x[i] + "月)");
+					dataOut[0].parents.push(catStructure.x[i] + "月");
+					dataOut[0].values.push(catMatrix[j].y2[i]);
+				}
+			}
+			var layout = {
+				"margin": {"l": 0, "r": 0, "b": 0, "t": 0},
+			};
+			
+			Plotly.newPlot('myDivIn', dataIn, layout, { showSendToCloud: true, responsive: true })
+			Plotly.newPlot('myDivOut', dataOut, layout, { showSendToCloud: true, responsive: true })
+			
+			var x = document.getElementById('myDivIn');
+			if (window.getComputedStyle(x).display === "none") {
+				$("#myDivIn").toggle();	
+			}
+			var x = document.getElementById('myDivOut');
+			if (window.getComputedStyle(x).display === "none") {
+				$("#myDivOut").toggle();	
+			}
+		} else {
+			// hide
+			var x = document.getElementById('myDivIn');
+			if (window.getComputedStyle(x).display !== "none") {
+				$("#myDivIn").toggle();	
+			}		
+			
+			var x = document.getElementById('myDivOut');
+			if (window.getComputedStyle(x).display !== "none") {
+				$("#myDivOut").toggle();	
+			}		
+		}
+	
+	};
 </script>
 </body>
 </html>
