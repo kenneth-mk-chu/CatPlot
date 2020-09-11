@@ -127,6 +127,7 @@
 	label {
 	  display: block;
 	  margin-bottom: 8px;
+	  font-size: 20px;
 	}
 
 	label.light {
@@ -170,7 +171,9 @@
 	  <option value="CQ">重慶</option>
 	  <option value="VN">越南</option>
 	  <option value="MY">馬來西亞</option>	  
-	</select>
+	</select>	
+	<label for="inActGraph">互動圖表</label>
+	<input type="checkbox" id="inActGraph" name="inActGraph" checked>
 	<button id="generate" value="generate">生成</button>
 </form>
 <br><br><hr><br><br>
@@ -349,10 +352,11 @@
 				ttlCatMatrix.y1[month - 1] += Number(row[month - 1]);				
 				if (Number(row[month - 1]) > maxY) {
 					maxY = Number(row[month - 1]);
-					
-					if (Number(row[month - 1]) > ttlCatMatrix.maxY) {
-						ttlCatMatrix.maxY = Number(row[month - 1]);
-					}
+				}
+				
+				// stupid way...
+				if (ttlCatMatrix.y1[month - 1] > ttlCatMatrix.maxY) {
+					ttlCatMatrix.maxY = ttlCatMatrix.y1[month - 1];
 				}
 			}
 			
@@ -366,17 +370,17 @@
 				ttlCatMatrix.y3[month - 1] += pdtY[month - 1];
 				if (Number(row[month - 1]) > maxY) {
 					maxY = Number(row[month - 1]);
-					
-					if (Number(row[month - 1]) > ttlCatMatrix.maxY) {
-						ttlCatMatrix.maxY = Number(row[month - 1]);
-					}
 				}
 				
+												
 				if (pdtY[month - 1] > maxY2) { 
 					maxY2 = pdtY[month - 1];
 				}
 				
 				// stupid way...
+				if (ttlCatMatrix.y2[month - 1] > ttlCatMatrix.maxY) {
+					ttlCatMatrix.maxY = ttlCatMatrix.y2[month - 1];
+				}
 				if (ttlCatMatrix.y3[month - 1] > ttlCatMatrix.maxY2) {
 					ttlCatMatrix.maxY2 = ttlCatMatrix.y3[month - 1];
 				}
