@@ -163,6 +163,7 @@
 <script src='js/jquery.min.js'></script>
 
 <form action="javascript:void(0);" >
+	 <label for="loc">地區:</label>
 	<select id="loc" name="loc">
 	  <option value="DG">東莞</option>
 	  <option value="GD">廣東</option>
@@ -172,96 +173,94 @@
 	  <option value="VN">越南</option>
 	  <option value="MY">馬來西亞</option>	  
 	</select>	
-	<label for="inActGraph">互動圖表</label>
+	<label for="inActGraph">互動圖表:</label>
 	<input type="checkbox" id="inActGraph" name="inActGraph" checked>
 	<button id="generate" value="generate">生成</button>
 </form>
 <br><br><hr><br><br>
 
-<!-- Plotly chart will be drawn inside this DIV -->
-<div id="myDiv0" style="display: none;"></div>
-<div id="myDiv1" style="display: none;"></div>
-<div id="myDiv2" style="display: none;"></div>
-<div id="myDiv3" style="display: none;"></div>
-<div id="myDiv4" style="display: none;"></div>
-<div id="myDiv5" style="display: none;"></div>
-<div id="myDiv6" style="display: none;"></div>
-<div id="myDiv7" style="display: none;"></div>
-<div id="myDiv8" style="display: none;"></div>
-<div id="myDiv9" style="display: none;"></div>
-<div id="myDiv10" style="display: none;"></div>
-<div id="myDiv11" style="display: none;"></div>
-<div id="myDiv12" style="display: none;"></div>
-<div id="myDiv13" style="display: none;"></div>
-<div id="myDiv14" style="display: none;"></div>
-<div id="myDiv15" style="display: none;"></div>
-<div id="myDiv16" style="display: none;"></div>
-
 <table id="table16"></table>
+<div id="myDiv16" style="display: none;"></div>
 <img id="png-export16"></img>
 <br><br><br><hr><br>
 
 <table id="table0"></table>
+<div id="myDiv0" style="display: none;"></div>
 <img id="png-export0"></img>
 <br><br><br><hr><br>
 
 <table id="table1"></table>
+<div id="myDiv1" style="display: none;"></div>
 <img id="png-export1"></img>
 <br><br><br><hr><br>
 
 <table id="table2"></table>
+<div id="myDiv2" style="display: none;"></div>
 <img id="png-export2"></img>
 <br><br><br><hr><br>
 
 <table id="table3"></table>
+<div id="myDiv3" style="display: none;"></div>
 <img id="png-export3"></img>
 <br><br><br><hr><br>
 
 <table id="table4"></table>
+<div id="myDiv4" style="display: none;"></div>
 <img id="png-export4"></img>
 <br><br><br><hr><br>
 
 <table id="table5"></table>
+<div id="myDiv5" style="display: none;"></div>
 <img id="png-export5"></img>
 <br><br><br><hr><br>
 
 <table id="table6"></table>
+<div id="myDiv6" style="display: none;"></div>
 <img id="png-export6"></img>
 <br><br><br><hr><br>
 
 <table id="table7"></table>
+<div id="myDiv7" style="display: none;"></div>
 <img id="png-export7"></img>
 <br><br><br><hr><br>
 
 <table id="table8"></table>
+<div id="myDiv8" style="display: none;"></div>
 <img id="png-export8"></img>
 <br><br><br><hr><br>
 
 <table id="table9"></table>
+<div id="myDiv9" style="display: none;"></div>
 <img id="png-export9"></img>
 <br><br><br><hr><br>
 
 <table id="table10"></table>
+<div id="myDiv10" style="display: none;"></div>
 <img id="png-export10"></img>
 <br><br><br><hr><br>
 
 <table id="table11"></table>
+<div id="myDiv11" style="display: none;"></div>
 <img id="png-export11"></img>
 <br><br><br><hr><br>
 
 <table id="table12"></table>
+<div id="myDiv12" style="display: none;"></div>
 <img id="png-export12"></img>
 <br><br><br><hr><br>
 
 <table id="table13"></table>
+<div id="myDiv13" style="display: none;"></div>
 <img id="png-export13"></img>
 <br><br><br><hr><br>
 
 <table id="table14"></table>
+<div id="myDiv14" style="display: none;"></div>
 <img id="png-export14"></img>
 <br><br><br><hr><br>
 
 <table id="table15"></table>
+<div id="myDiv15" style="display: none;"></div>
 <img id="png-export15"></img>
 <br><br><br><hr><br>
 
@@ -288,11 +287,15 @@
 	var categoryArray = ["輔料(含化學品）", "澱粉", "輥、網布及毛布", "馬達/電機", "電器零件", "閥門類", "軸承類", "大五金(其他)", "小五金(其他)", "廠車配件(叉車,抱車,夾車)", "建築材料", "儀表類", "電腦設備", "文儀用品", "食材", "後勤" ];
 	var d3 = Plotly.d3;
 	var loc = "";
+	var isIntActGraph = false;
 	
 	$(document).ready(function() {
 		$("#generate").on('click', function(e) {
 			loc = document.getElementById("loc").options[document.getElementById("loc").selectedIndex].value;
 			console.log(loc);
+			
+			isIntActGraph = document.getElementById("inActGraph").checked;
+			console.log(isIntActGraph);
 			
 			$.ajax({
 				type: "GET",
@@ -509,9 +512,7 @@
         cell.innerHTML = ttlY.toFixed(2);
 	}
 	
-	function makePlotly(catStructure, idx) {
-		var img_png= d3.select('#png-export' + idx);
-		
+	function makePlotly(catStructure, idx) {	
 		var traceIm = {
 			x: catStructure.x, 
 			y: catStructure.y1,
@@ -559,7 +560,7 @@
 		  margin: {
 			l: 100,
 			r: 100,
-		  },
+		  },		  
 		  barmode: 'group',
 		  bargap: 0.5,
 		  bargroupgap: 0.0,
@@ -647,18 +648,36 @@
 		  },
 		};
 		
-		Plotly.newPlot('myDiv' + idx, data, layout)
-		.then(
-		function(gd)
-			{
-				Plotly.toImage(gd,{height:720,width:2160})
-				.then(
-					function(url)
+		if (isIntActGraph) {
+			Plotly.newPlot('myDiv' + idx, data, layout, {responsive: true});
+			var x = document.getElementById('myDiv' + idx);
+			if (window.getComputedStyle(x).display === "none") {
+				$("#myDiv" + idx).toggle();	
+			}
+			var img_png = document.getElementById('png-export' + idx);
+			img_png.style.visibility = 'hidden';
+			Plotly.Plots.resize('myDiv' + idx);			
+		} else {
+			var img_png= d3.select('#png-export' + idx);
+			var x = document.getElementById('myDiv' + idx);
+			if (window.getComputedStyle(x).display !== "none") {
+				$("#myDiv" + idx).toggle();	
+			}			
+			Plotly.newPlot('myDiv' + idx, data, layout)
+			.then(
+			function(gd)
 				{
-					img_png.attr("src", url);
-				}
-			)
-		});
+					Plotly.toImage(gd,{height:720,width:2160})
+					.then(
+						function(url)
+					{
+						img_png.attr("src", url);
+					}
+				)
+			});
+			var img = document.getElementById('png-export' + idx);
+			img.style.visibility = 'visible';
+		}
 	};
 	
 </script>
