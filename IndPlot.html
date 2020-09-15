@@ -460,6 +460,7 @@
         row.appendChild(headerCell);
 				
 		var ttlY = 0;
+		var importY = 0;
 		var row = tbl.insertRow(-1);	
 		var cell = document.createElement("TH");
         cell.innerHTML = "入倉金額";
@@ -471,6 +472,7 @@
 		}
 		var cell = row.insertCell(-1);
         cell.innerHTML = ttlY.toFixed(2);		
+		importY = ttlY;
 				
 		var ttlY = 0;
 		var row = tbl.insertRow(-1);	
@@ -506,7 +508,11 @@
 		if (cell.innerHTML < 0) {
 			cell.classList.add('greenFont');
 		} else {
-			cell.classList.add('redFont');
+			var percentage = Number(cell.innerHTML) / importY;
+			if (percentage > 0.05) {
+				cell.innerHTML += " (" + Number(percentage * 100).toFixed(2) + "%)";
+				cell.classList.add('redFont');
+			}
 		}
 		
 		var ttlY = 0;
@@ -533,7 +539,7 @@
 			ttlY += catStructure.y3.length > i ? Number(catStructure.y3[i]) : 0;
 		}
 		var cell = row.insertCell(-1);
-        cell.innerHTML = ttlY.toFixed(2);
+        cell.innerHTML = Number(ttlY / catStructure.x.length).toFixed(2);
 	}
 	
 	function makePlotly(catStructure, idx) {	
