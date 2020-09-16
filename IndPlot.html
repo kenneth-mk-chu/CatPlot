@@ -172,6 +172,8 @@
 <form action="javascript:void(0);" >
 	 <label for="loc">地區:</label>
 	<select id="loc" name="loc">
+	  <option value="GPC">集團 (國內)</option>
+	  <option value="GPI">集團 (海外)</option>
 	  <option value="DG">東莞</option>
 	  <option value="GD">廣東</option>
 	  <option value="JS">江蘇</option>
@@ -287,6 +289,8 @@
 
 <script>
 	let millMap = new Map();
+	millMap.set('GPC', '集團 (國內)');
+	millMap.set('GPI', '集團 (海外)');
 	millMap.set('DG', '東莞');
 	millMap.set('GD', '廣東');
 	millMap.set('JS', '江蘇');
@@ -296,6 +300,7 @@
 	millMap.set('MY', '馬來西亞');
 	
 	let currMap = new Map();
+	currMap.set('GPC', '人民幣');
 	currMap.set('DG', '人民幣');
 	currMap.set('GD', '人民幣');
 	currMap.set('JS', '人民幣');
@@ -304,7 +309,10 @@
 	currMap.set('VN', '人民幣');
 	currMap.set('MY', '人民幣');	
 	
-	var categoryArray = ["輔料(含化學品）", "澱粉", "輥、網布及毛布", "馬達/電機", "電器零件", "閥門類", "軸承類", "大五金(其他)", "小五金(其他)", "廠車配件(叉車,抱車,夾車)", "建築材料", "儀表類", "電腦設備", "文儀用品", "食材", "後勤" ];
+	var gpcArray = ["DG", "GD", "JS", "JX", "CQ"];
+	var gpiArray = ["VN", "MY"];
+	
+	var categoryArray = ["輔料(含化學品）", "澱粉", "輥、網布及毛布", "馬達/電機", "電器零件", "閥門類", "軸承類", "大五金(其他)", "小五金(其他)", "廠車配件(叉車,抱車,夾車)", "建築材料", "儀表類", "電腦設備", "文儀用品", "食材", "後勤"];
 	var d3 = Plotly.d3;
 	var loc = "";
 	var isIntActGraph = false;
@@ -317,16 +325,105 @@
 			isIntActGraph = document.getElementById("inActGraph").checked;
 			console.log(isIntActGraph);
 			
-			$.ajax({
-				type: "GET",
-				url: "https://raw.githubusercontent.com/kenneth-mk-chu/CatPlot/master/Data_" + loc + ".csv",
-				//url: "Data_" + loc + ".csv",
-				dataType: "text",
-				success: function(data) { processData(data); }
-			});
+			if (loc === 'GPC') {			
+				console.log("process GPC...");				
+				var consolidateArray = [];
+				var resultGPC = [];
+				var requests = [];
+				for (var i = 0; i < gpcArray.length; i++) {
+					requests.push($.ajax({
+						type: "GET",
+						url: "https://raw.githubusercontent.com/kenneth-mk-chu/CatPlot/master/Data_" + gpcArray[i] + ".csv",
+						//url: "Data_" + gpcArray[i] + ".csv",
+						dataType: "text",
+						success: function(data, status, xhr) { 		
+							resultGPC.push(data);							
+						}
+					}));
+				}
+				
+				$.when.apply(undefined, requests).then(function() {					
+					console.log("then...");
+					for (var i = 0; i < resultGPC.length; i++) {
+						if (i == 0) {
+							var allTextLines = resultGPC[i].split(/\r\n|\n/);
+							var lines = [];
+							
+							for (var line = 0; line < allTextLines.length; line++) {
+								var entries = allTextLines[line].split(',');
+								lines.push(entries);
+							}
+							consolidateArray = lines;
+						} else {
+							var allTextLines = resultGPC[i].split(/\r\n|\n/);
+							var lines = [];
+							
+							for (var line = 0; line < allTextLines.length; line++) {
+								var entries = allTextLines[line].split(',');
+								for (var e = 0; e < entries.length; e++) {
+									consolidateArray[line][e] = Number(consolidateArray[line][e]) + Number(entries[e]);
+								}
+							}
+						}
+					}
+					console.log(consolidateArray);
+					processArrayData(consolidateArray);
+				});
+			} else if (loc === 'GPI') {			
+				console.log("process GPI...");				
+				var consolidateArray = [];
+				var resultGPC = [];
+				var requests = [];
+				for (var i = 0; i < gpiArray.length; i++) {
+					requests.push($.ajax({
+						type: "GET",
+						url: "https://raw.githubusercontent.com/kenneth-mk-chu/CatPlot/master/Data_" + gpiArray[i] + ".csv",
+						//url: "Data_" + gpiArray[i] + ".csv",
+						dataType: "text",
+						success: function(data, status, xhr) { 		
+							resultGPC.push(data);							
+						}
+					}));
+				}
+				
+				$.when.apply(undefined, requests).then(function() {					
+					console.log("then...");
+					for (var i = 0; i < resultGPC.length; i++) {
+						if (i == 0) {
+							var allTextLines = resultGPC[i].split(/\r\n|\n/);
+							var lines = [];
+							
+							for (var line = 0; line < allTextLines.length; line++) {
+								var entries = allTextLines[line].split(',');
+								lines.push(entries);
+							}
+							consolidateArray = lines;
+						} else {
+							var allTextLines = resultGPC[i].split(/\r\n|\n/);
+							var lines = [];
+							for (var line = 0; line < allTextLines.length; line++) {
+								var entries = allTextLines[line].split(',');
+								for (var e = 0; e < entries.length; e++) {
+									consolidateArray[line][e] = Number(consolidateArray[line][e]) + Number(entries[e]);
+								}
+							}
+						}
+					}
+					console.log(consolidateArray);
+					processArrayData(consolidateArray);
+				});
+			} else {
+				$.ajax({
+					type: "GET",
+					url: "https://raw.githubusercontent.com/kenneth-mk-chu/CatPlot/master/Data_" + loc + ".csv",
+					//url: "Data_" + loc + ".csv",
+					dataType: "text",
+					success: function(data) { processData(data); }
+				});
+			}
 		 });
 	});
-
+	
 	function processData(data) {
 		var allTextLines = data.split(/\r\n|\n/);
 		var lines = [];
