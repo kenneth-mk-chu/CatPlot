@@ -301,6 +301,7 @@
 	
 	let currMap = new Map();
 	currMap.set('GPC', '人民幣');
+	currMap.set('GPI', '人民幣');
 	currMap.set('DG', '人民幣');
 	currMap.set('GD', '人民幣');
 	currMap.set('JS', '人民幣');
@@ -325,28 +326,29 @@
 			isIntActGraph = document.getElementById("inActGraph").checked;
 			console.log(isIntActGraph);
 			
-			if (loc === 'GPC') {			
-				console.log("process GPC...");				
+			if ((loc === 'GPC') || (loc === 'GPI')) {			
+				console.log("process GPC or GPI...");				
 				var consolidateArray = [];
-				var resultGPC = [];
+				var resultGP = [];
 				var requests = [];
-				for (var i = 0; i < gpcArray.length; i++) {
+				var locationArray = (loc === 'GPC') ? gpcArray : gpiArray;
+				for (var i = 0; i < locationArray.length; i++) {
 					requests.push($.ajax({
 						type: "GET",
-						url: "https://raw.githubusercontent.com/kenneth-mk-chu/CatPlot/master/Data_" + gpcArray[i] + ".csv",
+						url: "https://raw.githubusercontent.com/kenneth-mk-chu/CatPlot/master/Data_" + locationArray[i] + ".csv",
 						//url: "Data_" + gpcArray[i] + ".csv",
 						dataType: "text",
 						success: function(data, status, xhr) { 		
-							resultGPC.push(data);							
+							resultGP.push(data);							
 						}
 					}));
 				}
 				
 				$.when.apply(undefined, requests).then(function() {					
 					console.log("then...");
-					for (var i = 0; i < resultGPC.length; i++) {
+					for (var i = 0; i < resultGP.length; i++) {
 						if (i == 0) {
-							var allTextLines = resultGPC[i].split(/\r\n|\n/);
+							var allTextLines = resultGP[i].split(/\r\n|\n/);
 							var lines = [];
 							
 							for (var line = 0; line < allTextLines.length; line++) {
@@ -355,7 +357,7 @@
 							}
 							consolidateArray = lines;
 						} else {
-							var allTextLines = resultGPC[i].split(/\r\n|\n/);
+							var allTextLines = resultGP[i].split(/\r\n|\n/);
 							var lines = [];
 							
 							for (var line = 0; line < allTextLines.length; line++) {
@@ -368,50 +370,7 @@
 					}
 					console.log(consolidateArray);
 					processArrayData(consolidateArray);
-				});
-			} else if (loc === 'GPI') {			
-				console.log("process GPI...");				
-				var consolidateArray = [];
-				var resultGPC = [];
-				var requests = [];
-				for (var i = 0; i < gpiArray.length; i++) {
-					requests.push($.ajax({
-						type: "GET",
-						url: "https://raw.githubusercontent.com/kenneth-mk-chu/CatPlot/master/Data_" + gpiArray[i] + ".csv",
-						//url: "Data_" + gpiArray[i] + ".csv",
-						dataType: "text",
-						success: function(data, status, xhr) { 		
-							resultGPC.push(data);							
-						}
-					}));
-				}
-				
-				$.when.apply(undefined, requests).then(function() {					
-					console.log("then...");
-					for (var i = 0; i < resultGPC.length; i++) {
-						if (i == 0) {
-							var allTextLines = resultGPC[i].split(/\r\n|\n/);
-							var lines = [];
-							
-							for (var line = 0; line < allTextLines.length; line++) {
-								var entries = allTextLines[line].split(',');
-								lines.push(entries);
-							}
-							consolidateArray = lines;
-						} else {
-							var allTextLines = resultGPC[i].split(/\r\n|\n/);
-							var lines = [];
-							for (var line = 0; line < allTextLines.length; line++) {
-								var entries = allTextLines[line].split(',');
-								for (var e = 0; e < entries.length; e++) {
-									consolidateArray[line][e] = Number(consolidateArray[line][e]) + Number(entries[e]);
-								}
-							}
-						}
-					}
-					console.log(consolidateArray);
-					processArrayData(consolidateArray);
-				});
+				});			
 			} else {
 				$.ajax({
 					type: "GET",
@@ -674,7 +633,7 @@
 				line: {
 				  width: 2,
 				},
-				size: 12,
+				size: 14,
 				color: "black",
 			},
 			name: "噸紙成本"
@@ -694,7 +653,7 @@
 			text: '<b>' + catStructure.title + '</b>',
 			font: {
 			  family: '楷体, STKaiti, 华文楷体, serif',
-			  size: 36,
+			  size: 48,
 			},
 		  },
 		  xaxis: {
@@ -702,7 +661,7 @@
 			  text: '<b>月份</b>',
 			  font: {
 			    family: '楷体, STKaiti, 华文楷体, serif',
-			    size: 28,
+			    size: 32,
 			  },
 			},
 			gridcolor: '#999999',
@@ -711,7 +670,7 @@
 			tickvals: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
 			tickfont: {
 			  family: '楷体, STKaiti, 华文楷体, serif',
-			  size: 28,
+			  size: 32,
 			},
 			range: [0, 13],
 			linecolor: 'black',
@@ -723,7 +682,7 @@
 			  text: '<b>' + catStructure.currency + '</b>',
 			  font: {
 			    family: '楷体, STKaiti, 华文楷体, serif',
-			    size: 28,
+			    size: 32,
 			  },
 			},
 			gridcolor: '#999999',
@@ -732,7 +691,7 @@
 			range: [0, catStructure.maxY],
 			tickfont: {
 			  family: '楷体, STKaiti, 华文楷体, serif',
-			  size: 28,
+			  size: 32,
 			},
 			linecolor: 'black',
 			linewidth: 2,
@@ -742,14 +701,14 @@
 			  text: '<b>噸紙成本 (' + catStructure.currency + ')</b>',
 			  font: {
 			    family: '楷体, STKaiti, 华文楷体, serif',
-			    size: 28,
+			    size: 32,
 			  },
 			},
 			dtick: catStructure.maxY2 / 10,
 			range: [0, catStructure.maxY2],
 			tickfont: {
 			  family: '楷体, STKaiti, 华文楷体, serif',
-			  size: 28,
+			  size: 32,
 			},
 			linecolor: 'black',
 			linewidth: 2,
@@ -763,12 +722,13 @@
 			valign: "middle",
 			font: {
 			  family: '楷体, STKaiti, 华文楷体, serif',
-			  size: 28,
+			  size: 36,
 			},
 			bordercolor: 'black',
 			borderwidth: 1,		
 			//orientation: 'h',
-			xanchor: 'right',
+			xanchor:"right",
+			yanchor:"top",
 			x: 1,
 			y: 1,
 		  },
