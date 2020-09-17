@@ -336,7 +336,7 @@
 					requests.push($.ajax({
 						type: "GET",
 						url: "https://raw.githubusercontent.com/kenneth-mk-chu/CatPlot/master/Data_" + locationArray[i] + ".csv",
-						//url: "Data_" + gpcArray[i] + ".csv",
+						//url: "Data_" + locationArray[i] + ".csv",
 						dataType: "text",
 						success: function(data, status, xhr) { 		
 							resultGP.push(data);							
@@ -753,7 +753,7 @@
 			.then(
 			function(gd)
 				{
-					Plotly.toImage(gd,{height:720,width:2160})
+					Plotly.toImage(gd,{height:720,width:2600})
 					.then(
 						function(url)
 					{
