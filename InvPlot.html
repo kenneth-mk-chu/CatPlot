@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<style>
+		table, td, th {
+		  border: 1px solid black;
+		}
+
+		table {
+		  border-collapse: collapse;
+		  width: 100%;
+		}
+
+		th, td {
+		  text-align: right;
+		  font-family: 楷体, STKaiti, 华文楷体, serif;
+		  font-size: 18px;
+		}		
+		
+		.redFont {
+			font-weight: bold;
+			font-family: 楷体, STKaiti, 华文楷体, serif;
+            color: red;
+        }
+		
+		.redFont::before {
+			content: "+";
+		}
+			
+		.greenFont {
+			font-weight: bold;
+			font-family: 楷体, STKaiti, 华文楷体, serif;
+            color: green;
+        }
+		
+	*,
+	*:before,
+	*:after {
+	  -moz-box-sizing: border-box;
+	  -webkit-box-sizing: border-box;
+	  box-sizing: border-box;
+	}
+
+	body {
+	  font-family: 楷体, STKaiti, 华文楷体, serif;
+	  font-size: 28px;
+	  color: #384047;
+	}
+
+	form {
+	  max-width: 300px;
+	  margin: 10px auto;
+	  padding: 10px 20px;
+	  background: #f4f7f8;
+	  border-radius: 8px;
+	}
+
+	h1 {
+	  margin: 0 0 30px 0;
+	  text-align: center;
+	}
+
+	input[type="text"],
+	input[type="password"],
+	input[type="date"],
+	input[type="datetime"],
+	input[type="email"],
+	input[type="number"],
+	input[type="search"],
+	input[type="tel"],
+	input[type="time"],
+	input[type="url"],
+	textarea,
+	select {
+	  background: rgba(255, 255, 255, 0.1);
+	  border: none;
+	  font-family: 楷体, STKaiti, 华文楷体, serif;
+	  font-size: 20px;
+	  height: auto;
+	  margin: 0;
+	  outline: 0;
+	  padding: 15px;
+	  width: 100%;
+	  background-color: #e8eeef;
+	  color: #000;
+	  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
+	  margin-bottom: 30px;
+	}
+
+	input[type="radio"],
+	input[type="checkbox"] {
+	  margin: 0 4px 8px 0;
+	}
+
+	select {
+	  padding: 6px;
+	  height: 32px;
+	  border-radius: 2px;
+	}
+
+	button {
+	  padding: 19px 39px 18px 39px;
+	  color: #000;
+	  background-color: #4bc970;
+	  font-family: 楷体, STKaiti, 华文楷体, serif;
+	  font-size: 24px;
+	  text-align: center;
+	  font-style: normal;
+	  border-radius: 5px;
+	  width: 100%;
+	  border: 1px solid #3ac162;
+	  border-width: 1px 1px 3px;
+	  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1) inset;
+	  margin-bottom: 10px;
+	}
+
+	fieldset {
+	  margin-bottom: 30px;
+	  border: none;
+	}
+
+	legend {
+	  font-family: 楷体, STKaiti, 华文楷体, serif;
+	  font-size: 1.4em;
+	  margin-bottom: 10px;
+	}
+
+	label {
+	  display: block;
+	  margin-bottom: 8px;
+	  font-size: 20px;
+	}
+
+	label.light {
+	  font-family: 楷体, STKaiti, 华文楷体, serif;
+	  font-weight: 300;
+	  display: inline;
+	}
+
+	.number {
+	  background-color: #5fcf80;
+	  color: #000;
+	  height: 30px;
+	  width: 30px;
+	  display: inline-block;
+	  font-family: 楷体, STKaiti, 华文楷体, serif;
+	  font-size: 0.8em;
+	  margin-right: 4px;
+	  line-height: 30px;
+	  text-align: center;
+	  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+	  border-radius: 100%;
+	}
+
+	@media screen and (min-width: 480px) {
+	  form {
+		max-width: 480px;
+	  }
+	}
+	
+	.center {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	</style>
+</head>
+<body>
+<script src="js/plotly-latest.min.js"></script>
+<script src='js/jquery.min.js'></script>
+
+<form action="javascript:void(0);" >	
+	<label for="inActGraph">互動圖表:</label>
+	<input type="checkbox" id="inActGraph" name="inActGraph" checked>
+	<button id="generate" value="generate">生成</button>
+</form>
+<br><br><hr><br><br>
+
+<div class="row">
+    <div class="col-sm-6">
+		<div class="center">
+			<div id="myDivIn" style="display: none;"></div>
+		</div>
+	</div>
+    <div class="col-sm-6">
+		<div class="center">
+			<div id="myDivOut" style="display: none;"></div>
+		</div>
+	</div>
+</div>
+<br>
+
+<table id="table0"></table>
+<div id="myDiv0" style="display: none;"></div>
+<img id="png-export0"></img>
+<br><br><br><hr><br>
+
+<table id="table1"></table>
+<div id="myDiv1" style="display: none;"></div>
+<img id="png-export1"></img>
+<br><br><br><hr><br>
+
+<table id="table2"></table>
+<div id="myDiv2" style="display: none;"></div>
+<img id="png-export2"></img>
+<br><br><br><hr><br>
+
+<table id="table3"></table>
+<div id="myDiv3" style="display: none;"></div>
+<img id="png-export3"></img>
+<br><br><br><hr><br>
+
+<table id="table4"></table>
+<div id="myDiv4" style="display: none;"></div>
+<img id="png-export4"></img>
+<br><br><br><hr><br>
+
+<table id="table5"></table>
+<div id="myDiv5" style="display: none;"></div>
+<img id="png-export5"></img>
+<br><br><br><hr><br>
+
+<table id="table6"></table>
+<div id="myDiv6" style="display: none;"></div>
+<img id="png-export6"></img>
+<br><br><br><hr><br>
+
+<table id="table7"></table>
+<div id="myDiv7" style="display: none;"></div>
+<img id="png-export7"></img>
+<br><br><br><hr><br>
+
+<table id="table8"></table>
+<div id="myDiv8" style="display: none;"></div>
+<img id="png-export8"></img>
+<br><br><br><hr><br>
+
+<table id="table9"></table>
+<div id="myDiv9" style="display: none;"></div>
+<img id="png-export9"></img>
+<br><br><br><hr><br>
+
+<table id="table10"></table>
+<div id="myDiv10" style="display: none;"></div>
+<img id="png-export10"></img>
+<br><br><br><hr><br>
+
+<table id="table11"></table>
+<div id="myDiv11" style="display: none;"></div>
+<img id="png-export11"></img>
+<br><br><br><hr><br>
+
+<table id="table12"></table>
+<div id="myDiv12" style="display: none;"></div>
+<img id="png-export12"></img>
+<br><br><br><hr><br>
+
+<table id="table13"></table>
+<div id="myDiv13" style="display: none;"></div>
+<img id="png-export13"></img>
+<br><br><br><hr><br>
+
+<script>
+	var categoryArray = ["輥、網布及毛布", "馬達/電機", "電器零件", "閥門類", "軸承類", "大五金(其他)", "小五金(其他)", "廠車配件(叉車,抱車,夾車)", "建築材料", "儀表類", "電腦設備", "文儀用品", "食材", "後勤"];
+	var millArray = ['廣東', '東莞', '江蘇', '江西', '重慶'];
+
+	var d3 = Plotly.d3;
+	var isIntActGraph = false;
+	
+	$(document).ready(function() {
+		$("#generate").on('click', function(e) {
+			isIntActGraph = document.getElementById("inActGraph").checked;
+			console.log(isIntActGraph);
+			
+			$.ajax({
+				type: "GET",
+				url: "https://raw.githubusercontent.com/kenneth-mk-chu/CatPlot/master/InvData.csv",
+				//url: "InvData.csv",
+				dataType: "text",
+				success: function(data) { processData(data); }
+			});
+		 });
+	});
+	
+	function processData(data) {
+		var allTextLines = data.split(/\r\n|\n/);
+		var lines = [];
+		
+		var sectionCnt = 0;
+		for (var line = 0; line < allTextLines.length; line++) {
+			var entries = allTextLines[line].split(',');
+			lines.push(entries);
+			
+			if (++sectionCnt == millArray.length + 1) {
+				processArrayData(lines, Math.floor(line / (millArray.length + 1)));
+				lines = [];
+				sectionCnt = 0;
+			}
+		}
+	}
+    
+	function processArrayData(allRows, sectionIdx) {
+		console.log(allRows);		
+		console.log(sectionIdx);
+		
+		var	catMatrix = {
+			x: ['<1年', '1-3年', '3-5年', '5-10年', '>10年'],
+			y: allRows,
+			maxY: 0,
+			title: categoryArray[sectionIdx],
+			itemType: categoryArray[sectionIdx],
+			currency: '人民幣',
+		};
+		
+		var maxValue = 0;
+		for (var i = 0; i < allRows.length; i++) {	
+			for (var j = 0; j < allRows[i].length; j++) {
+				if (Number(allRows[i][j]) > maxValue) { 
+					maxValue = Number(allRows[i][j]);
+				}
+			}
+		}
+		console.log(maxValue);
+		catMatrix.maxY = Math.pow(10, Math.ceil(Math.log10(maxValue)));
+		
+		console.log(catMatrix);		
+		makeTable(catMatrix, sectionIdx);
+		makePlotly(catMatrix, sectionIdx);		
+	}
+	
+	function makeTable(catStructure, idx) {
+		var tbl = document.getElementById("table" + idx);
+		
+		// clear the table first...
+		while (tbl.rows.length > 0) {
+			tbl.deleteRow(-1);
+		}
+		
+		var row = tbl.insertRow(-1);
+		var headerCell = document.createElement("TH");
+        headerCell.innerHTML = "年份";
+        row.appendChild(headerCell);
+        for (var i = 0; i < catStructure.x.length; i++) {
+            var headerCell = document.createElement("TH");
+            headerCell.innerHTML = catStructure.x.length > i ? catStructure.x[i] : i + 1;
+            row.appendChild(headerCell);
+        }
+		
+		for (var j = 0; j < millArray.length; j++) {
+			var row = tbl.insertRow(-1);	
+			var cell = document.createElement("TH");	
+			cell.innerHTML = millArray[j];
+			row.appendChild(cell);		
+			
+			for (var k = 0; k < catStructure.y[j].length; k++) {
+				var cell = row.insertCell(-1);
+				cell.innerHTML = catStructure.y[j][k] === "-" ? "-" : Number(catStructure.y[j][k]).toFixed(2);
+			}
+		}
+		
+		var row = tbl.insertRow(-1);	
+		var cell = document.createElement("TH");	
+		cell.innerHTML = "匯總";
+		row.appendChild(cell);		
+		for (var k = 0; k < catStructure.y[millArray.length].length; k++) {
+			var cell = row.insertCell(-1);
+			cell.innerHTML = catStructure.y[millArray.length][k] === "-" ? "-" : Number(catStructure.y[millArray.length][k]).toFixed(2);
+		}
+	}
+	
+	function makePlotly(catStructure, idx) {	
+		var data = [];
+		
+		for (var i = 0; i < millArray.length; i++) {
+			var trace = {
+				x: catStructure.x, 
+				y: catStructure.y[i],
+				yaxis: 'y',
+				type: 'bar',
+				marker: {
+					opacity: 0.8,
+					line: {
+					  width: 1,
+					},
+				},
+				name: millArray[i], 
+			};
+			data.push(trace);
+		}		
+		
+		var layout = {
+		  margin: {
+			l: 100,
+			r: 100,
+		  },		  
+		  barmode: 'group',
+		  bargap: 0.5,
+		  bargroupgap: 0.0,
+		  title: {
+			text: '<b>' + catStructure.title + '</b>',
+			font: {
+			  family: '楷体, STKaiti, 华文楷体, serif',
+			  size: 48,
+			},
+		  },
+		  xaxis: {
+			title: {
+			  text: '<b>月份</b>',
+			  font: {
+			    family: '楷体, STKaiti, 华文楷体, serif',
+			    size: 32,
+			  },
+			},
+			gridcolor: '#999999',
+			gridwidth: 1,	
+			dtick: 1,
+			tickfont: {
+			  family: '楷体, STKaiti, 华文楷体, serif',
+			  size: 32,
+			},
+			//range: [0, 13],
+			linecolor: 'black',
+			linewidth: 2,
+			mirror: true,
+		  },
+		  yaxis: {
+			title: {
+			  text: '<b>' + catStructure.currency + '</b>',
+			  font: {
+			    family: '楷体, STKaiti, 华文楷体, serif',
+			    size: 32,
+			  },
+			},
+			gridcolor: '#999999',
+			gridwidth: 1,	
+			mirror: true,
+			//dtick: catStructure.maxY / 10,
+			//range: [0, catStructure.maxY],
+			tickfont: {
+			  family: '楷体, STKaiti, 华文楷体, serif',
+			  size: 32,
+			},
+			linecolor: 'black',
+			linewidth: 2,
+		  },	  
+		  legend: {
+			traceorder: 'normal',
+			itemsizing: "trace",
+			valign: "middle",
+			font: {
+			  family: '楷体, STKaiti, 华文楷体, serif',
+			  size: 36,
+			},
+			bordercolor: 'black',
+			borderwidth: 1,		
+			//orientation: 'h',
+			xanchor:"right",
+			yanchor:"top",
+			x: 1,
+			y: 1,
+		  },
+		};
+		
+		if (isIntActGraph) {
+			Plotly.newPlot('myDiv' + idx, data, layout, {responsive: true});
+			var x = document.getElementById('myDiv' + idx);
+			if (window.getComputedStyle(x).display === "none") {
+				$("#myDiv" + idx).toggle();	
+			}
+			var img_png = document.getElementById('png-export' + idx);
+			img_png.style.visibility = 'hidden';
+			Plotly.Plots.resize('myDiv' + idx);			
+		} else {
+			var img_png= d3.select('#png-export' + idx);
+			var x = document.getElementById('myDiv' + idx);
+			if (window.getComputedStyle(x).display !== "none") {
+				$("#myDiv" + idx).toggle();	
+			}			
+			Plotly.newPlot('myDiv' + idx, data, layout)
+			.then(
+			function(gd)
+				{
+					Plotly.toImage(gd,{height:720,width:2600})
+					.then(
+						function(url)
+					{
+						img_png.attr("src", url);
+					}
+				)
+			});
+			var img = document.getElementById('png-export' + idx);
+			img.style.visibility = 'visible';
+		}
+	};	
+</script>
+</body>
+</html>
